@@ -46,5 +46,65 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+      // Enhance activity card rendering to include participants
+      function renderActivities(activities) {
+        const activitiesList = document.getElementById('activities-list');
+        activitiesList.innerHTML = '';
+        Object.entries(activities).forEach(([name, info]) => {
+          const card = document.createElement('div');
+          card.className = 'activity-card';
+          card.innerHTML = `
+            <h4>${name}</h4>
+            <p><strong>Description:</strong> ${info.description}</p>
+            <p><strong>Schedule:</strong> ${info.schedule}</p>
+            <p><strong>Max Participants:</strong> ${info.max_participants}</p>
+            <div class="participants-section">
+              <strong>Participants:</strong>
+              <ul class="participants-list">
+                ${info.participants.length > 0
+                  ? info.participants.map(email => `<li>${email}</li>`).join('')
+                  : '<li class="no-participants">No participants yet</li>'}
+              </ul>
+            </div>
+          `;
+          activitiesList.appendChild(card);
+        });
+      }
+
+      // Mock activities data for demonstration
+      const activities = {
+        'Soccer Club': {
+          description: 'Join the soccer club to play and compete.',
+          schedule: 'Mondays and Wednesdays, 3-5 PM',
+          max_participants: 20,
+          participants: ['john.doe@mergington.edu', 'jane.smith@mergington.edu'],
+        },
+        'Chess Club': {
+          description: 'Participate in chess matches and improve your skills.',
+          schedule: 'Tuesdays, 4-6 PM',
+          max_participants: 15,
+          participants: [],
+        },
+      };
+
+      // Initial rendering of activities
+      renderActivities(activities);
+
+      // Handle signup form submission
+      document.getElementById('signup-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const activityName = document.getElementById('activity').value;
+
+        // ...existing signup handling code...
+
+        // Update activities data and re-render
+        if (activities[activityName]) {
+          activities[activityName].participants.push(email);
+          renderActivities(activities);
+        }
+      });
+    </script>
   </body>
 </html>
